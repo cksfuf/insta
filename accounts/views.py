@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from .models import User
 # Create your views here.
 def signup(request):
     if request.method == 'POST':
@@ -42,3 +43,26 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('posts:index')
+
+
+def profile(request, username):
+    user_info = User.objects.get(username=username)
+
+    context = {
+        'user_info': user_info,
+    }
+
+    return render(request, 'profile.html', context)
+
+
+def follow(request, username):
+    me = request.user
+    you = User.objects.get(username=username)
+
+    if me in you.followers.all():
+        you.followers.remove(me)
+        # me.followings.remove(you)
+    else:
+        you.followers.add(me)
+
+    return redirect('accounts:profile', username=username)
