@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block body %}
+    <form action="" method="POST" enctype="multipart/form-data"> <!-- enctype="multipart/form-data"는 파일을 업로드 하려면 지정해줘야함. -->
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit">
+    </form>
+{% endblock %}
